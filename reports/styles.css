@@ -180,9 +180,9 @@
   }
 
   .report-container {
-    background-color: var(--bg-surface);
+    background-color: var(--bg-body);
     border-radius: var(--border-radius-lg);
-    border: 1px solid var(--border-color);
+    border: none;
     overflow: hidden;
     box-shadow: var(--card-shadow);
   }
@@ -1666,4 +1666,33 @@
     break-before: page;
   }
 
-    
+/* -------------------------------------------------------------------------- */
+/*  PARITY TIGHTENING: GLOBAL SPACING & TABLES                                */
+/* -------------------------------------------------------------------------- */
+.section { margin-bottom: 28px; }
+.section + .section { margin-top: -6px; }
+.section-title { margin-bottom: 12px; }
+.subsection-title { margin-bottom: 8px; }
+
+.tldr-section { padding: 18px; }
+.tldr-table td { padding: 10px 12px; }
+
+.score-grid,
+.metric-grid { row-gap: 12px; }
+.metric-card { padding: 14px 14px 12px 14px; }
+
+.data-table th,
+.data-table td {
+  padding: 10px 12px;
+  line-height: 1.35;
+}
+.data-table tbody tr + tr td {
+  border-top: 1px solid var(--border-color);
+}
+
+.platform-badge,
+.tag-danger,
+.status { line-height: 1.25; }
+
+.toc-list { gap: 8px; }
+.toc-link { padding: 8px 10px; }

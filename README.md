@@ -40,6 +40,15 @@ A comprehensive Answer Engine Optimization (AEO) analysis platform. Analyze comp
 - Dark/light theme support
 - Professional design with insights and recommendations
 
+#### Local PDF export (standalone)
+You can convert any generated HTML report to PDF using a configurable endpoint:
+```bash
+python pdf_export.py path/to/report.html \
+  --endpoint http://localhost:8000/pdf/convert \
+  --output report.pdf
+```
+Set `PDF_ENDPOINT` env var to override the endpoint.
+
 ## 📁 Repository Structure
 
 ```

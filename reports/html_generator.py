@@ -77,6 +77,7 @@ INDUSTRY_BENCHMARKS: Dict[str, Dict[str, Any]] = {
     'Software': {'avgVisibility': 32, 'topPerformerVisibility': 65, 'avgMentionQuality': 5.2, 'description': 'Software & Technology'},
     'Technology': {'avgVisibility': 30, 'topPerformerVisibility': 60, 'avgMentionQuality': 5.0, 'description': 'Technology companies'},
     'AI': {'avgVisibility': 45, 'topPerformerVisibility': 80, 'avgMentionQuality': 6.5, 'description': 'AI & Machine Learning'},
+    'Data Analytics / Business Intelligence': {'avgVisibility': 35, 'topPerformerVisibility': 60, 'avgMentionQuality': 5.5, 'description': 'Analytics & BI'},
     'Cybersecurity': {'avgVisibility': 38, 'topPerformerVisibility': 72, 'avgMentionQuality': 5.8, 'description': 'Security software'},
     'B2B Services': {'avgVisibility': 28, 'topPerformerVisibility': 55, 'avgMentionQuality': 4.8, 'description': 'Business services'},
     'Consulting': {'avgVisibility': 25, 'topPerformerVisibility': 50, 'avgMentionQuality': 4.5, 'description': 'Professional consulting'},
@@ -106,7 +107,8 @@ def get_industry_benchmark(industry: Optional[str]) -> Dict[str, Any]:
     industry_segments = [s.strip().lower() for s in industry.split(',') if s.strip()]
     
     priority_order = [
-        'AI', 'Cybersecurity', 'Fintech', 'Health Tech', 'HR Tech', 'SaaS',
+        'AI', 'Data Analytics / Business Intelligence', 'Analytics', 'Business Intelligence',
+        'Cybersecurity', 'Fintech', 'Health Tech', 'HR Tech', 'SaaS',
         'Software', 'Technology', 'B2B Services', 'Consulting', 'Marketing',
         'E-commerce', 'DTC', 'Retail', 'Finance', 'Insurance', 'Healthcare',
         'Biotech', 'Education', 'Real Estate', 'Manufacturing', 'Recruitment'
@@ -319,11 +321,32 @@ def build_industry_benchmark(data: HtmlReportData) -> str:
     quality_score = canvas_data.get('mentionsCheck', {}).get('qualityScore', 0)
     industry = canvas_data.get('clientInfo', {}).get('industry', 'General')
     client_name = data.get('clientName', '')
-    
+
+    # Start with default benchmark based on industry
     benchmark = get_industry_benchmark(industry)
-    percentile = round(calculate_percentile(visibility, benchmark['avgVisibility'], benchmark['topPerformerVisibility']))
-    quality_percentile = round(calculate_percentile(quality_score * 10, benchmark['avgMentionQuality'] * 10, 90))
-    
+
+    # Allow explicit overrides from input data (for parity with TypeScript fixtures)
+    data_benchmark = data.get('industryBenchmark') or {}
+    benchmark = {
+        **benchmark,
+        **{
+            'matchedIndustry': data_benchmark.get('industry', benchmark.get('matchedIndustry', industry)),
+            'avgVisibility': data_benchmark.get('industryAverage', benchmark.get('avgVisibility')),
+            'topPerformerVisibility': data_benchmark.get('topPerformers', benchmark.get('topPerformerVisibility')),
+            'avgMentionQuality': data_benchmark.get('avgMentionQuality', benchmark.get('avgMentionQuality')),
+        },
+    }
+
+    # Percentiles can be overridden directly if provided
+    percentile = data_benchmark.get('percentile')
+    quality_percentile = data_benchmark.get('qualityPercentile')
+
+    if percentile is None:
+        percentile = round(calculate_percentile(visibility, benchmark['avgVisibility'], benchmark['topPerformerVisibility']))
+
+    if quality_percentile is None:
+        quality_percentile = round(calculate_percentile(quality_score * 10, benchmark['avgMentionQuality'] * 10, 90))
+
     if percentile >= 90:
         position_text, position_class = 'Industry Leader', 'excellent'
     elif percentile >= 70:
@@ -335,7 +358,10 @@ def build_industry_benchmark(data: HtmlReportData) -> str:
     else:
         position_text, position_class = 'Needs Improvement', 'poor'
     
-    gap_to_top = max(0, benchmark['topPerformerVisibility'] - visibility)
+    gap_to_top = data_benchmark.get('gapToTop')
+    if gap_to_top is None:
+        gap_to_top = max(0, benchmark['topPerformerVisibility'] - visibility)
+
     percentile_str = format_ordinal(percentile)
     
     default_note = ''
@@ -998,7 +1024,8 @@ def build_executive_tldr(data: HtmlReportData) -> str:
     top_win_display = top_win.get('query', 'No strong wins yet')
     top_win_context = f"via {top_win.get('platform', '')}" if top_win.get('platform') else 'Run more queries'
     
-    top_loss = (insights.get('lowlights', [{}])[0] if insights and insights.get('lowlights') else None) or (insights.get('topOpportunities', [{}])[0] if insights and insights.get('topOpportunities') else {})
+    # Prefer top opportunities for TL;DR gap (matches TS report), fall back to lowlights
+    top_loss = (insights.get('topOpportunities', [{}])[0] if insights and insights.get('topOpportunities') else None) or (insights.get('lowlights', [{}])[0] if insights and insights.get('lowlights') else {})
     top_loss_display = top_loss.get('query', 'No major gaps found') if top_loss else 'No major gaps found'
     top_loss_context = ''
     if top_loss and top_loss.get('competitorsMentioned'):
@@ -1128,7 +1155,7 @@ def build_content_strategy(data: HtmlReportData) -> str:
         f"""
         <tr>
           <td>
-            <strong>{escape_html(p.get('name', ''))}</strong>
+            <strong>{escape_html(p.get('name') or p.get('pillar', ''))}</strong>
             <div class="text-xs text-muted">{escape_html(p.get('subtitle', ''))}</div>
           </td>
           <td style="color: var(--gray-400);">{', '.join([escape_html(c) for c in p.get('clusters', [])])}</td>
@@ -1136,6 +1163,14 @@ def build_content_strategy(data: HtmlReportData) -> str:
         """ for p in pillars
     ])
     
+    def normalize_schema(val: Any) -> list[str]:
+        if not val:
+            return []
+        if isinstance(val, list):
+            return [str(v).strip() for v in val if str(v).strip()]
+        # treat string like "Article, HowTo, FAQPage"
+        return [s.strip() for s in str(val).split(',') if s.strip()]
+
     content_rows = ''.join([
         f"""
         <tr>
@@ -1143,9 +1178,9 @@ def build_content_strategy(data: HtmlReportData) -> str:
             <strong>{escape_html(c.get('title', ''))}</strong>
             <div class="text-xs text-muted">{escape_html(c.get('description', ''))}</div>
           </td>
-          <td class="numeric">{escape_html(c.get('wordCount', ''))}</td>
+          <td class="numeric">{escape_html(c.get('wordCount') or c.get('words', ''))}</td>
           <td><span class="status {get_priority_class(c.get('priority', ''))}">{escape_html(c.get('priority', ''))}</span></td>
-          <td style="color: var(--gray-400);">{', '.join([escape_html(s) for s in c.get('schema', [])])}</td>
+          <td style="color: var(--gray-400);">{', '.join([escape_html(s) for s in normalize_schema(c.get('schema'))])}</td>
         </tr>
         """ for c in priority_content
     ])
