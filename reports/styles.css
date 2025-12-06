@@ -1481,6 +1481,179 @@
     .data-table { break-inside: avoid; }
   }
 
+  /* Industry Benchmark Section */
+  .benchmark-summary {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .benchmark-position {
+    text-align: center;
+    min-width: 120px;
+  }
+
+  .percentile-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--border-radius);
+    background: var(--bg-surface);
+    border: 2px solid var(--border-color);
+    margin: 0 auto var(--space-sm);
+  }
+
+  .percentile-badge.excellent { border-color: var(--color-success); background: var(--color-success-bg); }
+  .percentile-badge.good { border-color: var(--color-success); background: var(--color-success-bg); }
+  .percentile-badge.fair { border-color: var(--color-warning); background: var(--color-warning-bg); }
+  .percentile-badge.poor { border-color: var(--color-danger); background: var(--color-danger-bg); }
+
+  .percentile-value {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .percentile-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .position-text {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .position-text.excellent { color: var(--color-success); }
+  .position-text.good { color: var(--color-success); }
+  .position-text.fair { color: var(--color-warning); }
+  .position-text.poor { color: var(--color-danger); }
+
+  .benchmark-context {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .benchmark-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .benchmark-description strong {
+    color: var(--text-primary);
+  }
+
+  .benchmark-comparison {
+    margin: var(--space-lg) 0;
+  }
+
+  .subsection-title {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-md);
+  }
+
+  .benchmark-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .benchmark-bar-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .benchmark-bar-row .bar-label {
+    width: 120px;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .benchmark-bar-row .bar-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .benchmark-bar-row .bar {
+    height: 12px;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+  }
+
+  .benchmark-bar-row .bar.client-bar {
+    background: var(--brand-primary);
+  }
+
+  .benchmark-bar-row .bar.avg-bar {
+    background: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  .benchmark-bar-row .bar.top-bar {
+    background: var(--color-success);
+    opacity: 0.7;
+  }
+
+  .benchmark-bar-row .bar-value {
+    min-width: 50px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--text-primary);
+    text-align: right;
+  }
+
+  .benchmark-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .benchmark-metrics .metric-item {
+    text-align: center;
+  }
+
+  .benchmark-metrics .metric-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-xs);
+  }
+
+  .benchmark-metrics .metric-value {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .benchmark-metrics .metric-value.excellent { color: var(--color-success); }
+  .benchmark-metrics .metric-value.good { color: var(--color-success); }
+  .benchmark-metrics .metric-value.fair { color: var(--color-warning); }
+  .benchmark-metrics .metric-value.poor { color: var(--color-danger); }
+
       
   @page {
     size: A4;
