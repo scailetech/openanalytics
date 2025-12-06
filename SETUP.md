@@ -1,8 +1,10 @@
 # Setup Guide
 
-## Repository Created
+## Repository Setup
 
-The GitHub repository has been created at: **https://github.com/SCAILE-it/openanalytics**
+The GitHub repository should be created at: **https://github.com/federicodeponte/openanalytics**
+
+**Note:** You'll need to create the repository on GitHub first (or it will be created automatically when you push).
 
 ## Push to GitHub
 
@@ -13,7 +15,7 @@ To push your code to GitHub, you'll need to authenticate. Here are the options:
 1. Set up SSH keys with GitHub if you haven't already
 2. Update the remote URL:
    ```bash
-   git remote set-url origin git@github.com:SCAILE-it/openanalytics.git
+   git remote set-url origin git@github.com:federicodeponte/openanalytics.git
    git push -u origin main
    ```
 
@@ -68,10 +70,10 @@ openanalytics/
 ## Sharing with Colleagues
 
 Once pushed to GitHub, you can share the repository URL:
-**https://github.com/SCAILE-it/openanalytics**
+**https://github.com/federicodeponte/openanalytics**
 
 They can clone it with:
 ```bash
-git clone https://github.com/SCAILE-it/openanalytics.git
+git clone https://github.com/federicodeponte/openanalytics.git
 ```
 
