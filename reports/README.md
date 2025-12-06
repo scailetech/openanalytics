@@ -21,10 +21,10 @@ html_report = generate_report_html(
 with open("report.html", "w") as f:
     f.write(html_report)
 
-# Or convert to PDF using the PDF service
+# Or convert to PDF using your PDF service
 import requests
 pdf_response = requests.post(
-    "https://YOUR_WORKSPACE--pdf-service-fastapi-app.modal.run/convert",
+    "http://localhost:8000/pdf/convert",  # Configure your PDF service endpoint
     json={
         "html": html_report,
         "format": "A4",
