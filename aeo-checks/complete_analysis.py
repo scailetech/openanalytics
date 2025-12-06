@@ -5,14 +5,14 @@ Takes a URL, runs all checks (company analysis, health check, mentions check),
 generates HTML and PDF reports, and returns everything.
 """
 
-    import httpx
-    import base64
-    import os
-    from typing import Optional, Dict, Any
-    from fastapi import HTTPException
-    from pydantic import BaseModel, Field
-    import logging
-    import asyncio
+import httpx
+import base64
+import os
+from typing import Optional, Dict, Any
+from fastapi import HTTPException
+from pydantic import BaseModel, Field
+import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
