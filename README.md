@@ -96,6 +96,31 @@ modal deploy modal_deploy.py
 
 ### 3. Test the Services
 
+#### Complete Analysis (Recommended - One Endpoint for Everything)
+
+```bash
+# Complete analysis: URL → all checks → HTML + PDF reports
+curl -X POST https://YOUR_WORKSPACE--aeo-checks-fastapi-app.modal.run/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "company_name": "Example Inc",
+    "mentions_mode": "fast",
+    "theme": "dark",
+    "pdf_service_url": "https://YOUR_WORKSPACE--pdf-service-fastapi-app.modal.run"
+  }'
+```
+
+This returns:
+- `company_analysis` - Full company analysis JSON
+- `health_check` - Health check results JSON
+- `mentions_check` - Mentions check results JSON
+- `html_report` - Complete HTML report
+- `pdf_base64` - PDF report (base64 encoded)
+- `pdf_size_bytes` - PDF file size
+
+#### Individual Endpoints
+
 ```bash
 # Health check
 curl https://YOUR_WORKSPACE--aeo-checks-fastapi-app.modal.run/status
@@ -136,6 +161,7 @@ curl -X POST https://YOUR_WORKSPACE--aeo-checks-fastapi-app.modal.run/mentions/c
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
+| `/analyze` | POST | **Complete analysis**: URL → all checks → HTML + PDF reports |
 | `/status` | GET | Gateway health with service status |
 | `/company/analyze` | POST | Full company analysis |
 | `/company/crawl-logo` | POST | Standalone logo detection |
@@ -193,7 +219,56 @@ export DATAFORSEO_PASSWORD=your_password
 
 ## 📝 Usage Examples
 
-### Complete Analysis Workflow
+### Complete Analysis Workflow (Simplified)
+
+The `/analyze` endpoint does everything in one call:
+
+```python
+import requests
+import base64
+
+BASE_URL = "https://YOUR_WORKSPACE--aeo-checks-fastapi-app.modal.run"
+PDF_SERVICE_URL = "https://YOUR_WORKSPACE--pdf-service-fastapi-app.modal.run"
+
+# Single API call - runs everything
+response = requests.post(
+    f"{BASE_URL}/analyze",
+    json={
+        "url": "https://example.com",
+        "company_name": "Example Inc",  # Optional, will be extracted from URL
+        "mentions_mode": "fast",  # or "full" for 50 queries
+        "theme": "dark",  # or "light"
+        "pdf_service_url": PDF_SERVICE_URL
+    }
+)
+
+result = response.json()
+
+# Access all data
+company_data = result["company_analysis"]
+health_data = result["health_check"]
+mentions_data = result["mentions_check"]
+html_report = result["html_report"]
+pdf_base64 = result.get("pdf_base64")
+
+# Save HTML report
+with open("report.html", "w") as f:
+    f.write(html_report)
+
+# Save PDF report
+if pdf_base64:
+    pdf_bytes = base64.b64decode(pdf_base64)
+    with open("report.pdf", "wb") as f:
+        f.write(pdf_bytes)
+
+print(f"Analysis complete in {result['analysis_time_seconds']:.1f}s")
+print(f"Health Score: {health_data.get('score', 'N/A')}")
+print(f"Visibility: {mentions_data.get('visibility', 'N/A')}%")
+```
+
+### Individual Endpoints Workflow (Advanced)
+
+If you need more control, use individual endpoints:
 
 ```python
 import requests

@@ -41,6 +41,8 @@ image = (
         "uvicorn>=0.24.0",
         "pydantic>=2.5.0",
         "httpx>=0.25.0",
+        # For complete analysis endpoint
+        "aiohttp>=3.9.0",
         # HTML parsing
         "beautifulsoup4>=4.12.0",
         "lxml>=4.9.0",
@@ -67,6 +69,7 @@ image = (
     .add_local_python_source("company_service")
     .add_local_python_source("health_service")
     .add_local_python_source("mentions_service")
+    .add_local_python_source("complete_analysis")
     # Shared modules
     .add_local_python_source("tech_detector")
     .add_local_python_source("logo_detector")
@@ -81,6 +84,8 @@ image = (
     .add_local_python_source("serp_dataforseo")
     # Health check modules
     .add_local_dir(local_dir / "checks", remote_path="/root/checks")
+    # Reports module (for HTML generation)
+    .add_local_dir(local_dir.parent / "reports", remote_path="/root/reports")
 )
 
 
