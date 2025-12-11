@@ -1,0 +1,357 @@
+{
+  "url": "https://telli.com",
+  "company_name": "Telli",
+  "company_analysis": {
+    "company_info": {
+      "description": "",
+      "industry": "",
+      "target_audience": []
+    },
+    "competitors": [],
+    "insights": [],
+    "legal_info": null,
+    "brand_voice": null,
+    "tone": null,
+    "brand_assets": null,
+    "website_tech": null,
+    "analysis_error": "Analysis failed: RuntimeError: All analysis attempts failed: insufficient data quality from both primary and fallback methods"
+  },
+  "health_check": {
+    "url": "https://www.telli.com/",
+    "score": 45.0,
+    "grade": "C",
+    "visibility_band": "Moderate",
+    "band_color": "#eab308",
+    "tier_info": {
+      "tier0": {
+        "passed": true,
+        "cap": 100,
+        "reason": "AI can access site"
+      },
+      "tier1": {
+        "passed": false,
+        "cap": 45,
+        "reason": "Missing Organization schema - AI can't identify entity"
+      },
+      "tier2": {
+        "passed": false,
+        "cap": 85,
+        "reason": "Issue: no sameAs links"
+      },
+      "base_score": 76.0,
+      "limiting_tier": "tier1",
+      "limiting_reason": "Missing Organization schema - AI can't identify entity"
+    },
+    "categoryClarityScore": 60,
+    "entityStrengthScore": 15,
+    "authoritySignalScore": 5,
+    "total_checks": 29,
+    "passed": 16,
+    "errors": 0,
+    "warnings": 7,
+    "notices": 6,
+    "issues": [
+      {
+        "check": "title_tag",
+        "category": "technical",
+        "passed": false,
+        "severity": "warning",
+        "message": "Title too long (66 chars)",
+        "recommendation": "Shorten title to 30-65 characters to avoid truncation",
+        "score_impact": 10
+      },
+      {
+        "check": "meta_description",
+        "category": "technical",
+        "passed": false,
+        "severity": "warning",
+        "message": "Meta description too long (192 chars)",
+        "recommendation": "Shorten to 120-160 characters to avoid truncation",
+        "score_impact": 10
+      },
+      {
+        "check": "h1_tag",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Single H1 tag: \"AI\u00a0phone callsthatconvert...\"",
+        "recommendation": "",
+        "score_impact": 10
+      },
+      {
+        "check": "heading_structure",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Good structure: 1 H1, 3 H2, 4 H3, 14 H4",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "image_alt_text",
+        "category": "technical",
+        "passed": false,
+        "severity": "notice",
+        "message": "Only 17/80 images have descriptive alt text (21%)",
+        "recommendation": "Add descriptive alt text to more images for better accessibility and SEO",
+        "score_impact": 10
+      },
+      {
+        "check": "mobile_viewport",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Viewport configured correctly",
+        "recommendation": "",
+        "score_impact": 10
+      },
+      {
+        "check": "structured_data_presence",
+        "category": "technical",
+        "passed": false,
+        "severity": "warning",
+        "message": "No structured data (schema.org) found",
+        "recommendation": "Add JSON-LD structured data to help AI understand your content",
+        "score_impact": 10
+      },
+      {
+        "check": "https",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Site using HTTPS",
+        "recommendation": "",
+        "score_impact": 10
+      },
+      {
+        "check": "canonical_tag",
+        "category": "technical",
+        "passed": false,
+        "severity": "notice",
+        "message": "Canonical points to different URL: https://telli.com/",
+        "recommendation": "Verify canonical URL is correct - this page may be considered duplicate content",
+        "score_impact": 5
+      },
+      {
+        "check": "robots_meta",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "No indexing restrictions found",
+        "recommendation": "",
+        "score_impact": 15
+      },
+      {
+        "check": "content_word_count",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Good content length (675 words)",
+        "recommendation": "",
+        "score_impact": 10
+      },
+      {
+        "check": "internal_linking",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "48 internal links, 7 external",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "language_tag",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Language set to: en",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "sitemap_xml",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Sitemap.xml found",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "response_time",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Fast response time (333ms)",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "hreflang_tags",
+        "category": "technical",
+        "passed": true,
+        "severity": "pass",
+        "message": "Hreflang configured for 5 versions including x-default: x-default, en, de, en, de",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "org_schema_completeness",
+        "category": "structured_data",
+        "passed": false,
+        "severity": "warning",
+        "message": "No Organization schema found",
+        "recommendation": "Add Organization schema with name, url, logo, description, and sameAs links",
+        "score_impact": 10
+      },
+      {
+        "check": "faq_schema",
+        "category": "structured_data",
+        "passed": false,
+        "severity": "notice",
+        "message": "No FAQ schema found",
+        "recommendation": "Add FAQPage schema to help AI extract Q&A content",
+        "score_impact": 5
+      },
+      {
+        "check": "content_schema",
+        "category": "structured_data",
+        "passed": false,
+        "severity": "notice",
+        "message": "No content schema (HowTo/Article) found",
+        "recommendation": "Add Article or HowTo schema for content-rich pages",
+        "score_impact": 5
+      },
+      {
+        "check": "sameas_links",
+        "category": "structured_data",
+        "passed": false,
+        "severity": "warning",
+        "message": "No sameAs links in Organization schema",
+        "recommendation": "Add sameAs links to LinkedIn, Wikipedia, Twitter, Crunchbase for knowledge graph",
+        "score_impact": 5
+      },
+      {
+        "check": "content_freshness",
+        "category": "structured_data",
+        "passed": false,
+        "severity": "notice",
+        "message": "No content dates found (datePublished/dateModified)",
+        "recommendation": "Add datePublished and dateModified to Article schema or use <time> elements",
+        "score_impact": 5
+      },
+      {
+        "check": "jsonld_validation",
+        "category": "structured_data",
+        "passed": true,
+        "severity": "pass",
+        "message": "No validatable schemas found",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "gptbot_access",
+        "category": "aeo_crawler",
+        "passed": true,
+        "severity": "pass",
+        "message": "GPTBot (OpenAI) is allowed",
+        "recommendation": "",
+        "score_impact": 8
+      },
+      {
+        "check": "claude_access",
+        "category": "aeo_crawler",
+        "passed": true,
+        "severity": "pass",
+        "message": "Claude-Web (Anthropic) is allowed",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "perplexitybot_access",
+        "category": "aeo_crawler",
+        "passed": true,
+        "severity": "pass",
+        "message": "PerplexityBot is allowed",
+        "recommendation": "",
+        "score_impact": 5
+      },
+      {
+        "check": "ccbot_access",
+        "category": "aeo_crawler",
+        "passed": true,
+        "severity": "pass",
+        "message": "CCBot (Common Crawl) is allowed",
+        "recommendation": "",
+        "score_impact": 4
+      },
+      {
+        "check": "about_page",
+        "category": "authority",
+        "passed": false,
+        "severity": "notice",
+        "message": "No About page link found",
+        "recommendation": "Add a visible link to your About/Company page for trust signals",
+        "score_impact": 5
+      },
+      {
+        "check": "contact_info",
+        "category": "authority",
+        "passed": false,
+        "severity": "warning",
+        "message": "No contact information found",
+        "recommendation": "Add visible email, phone, or address for trust and local SEO",
+        "score_impact": 5
+      },
+      {
+        "check": "social_proof_links",
+        "category": "authority",
+        "passed": false,
+        "severity": "warning",
+        "message": "No social media links found",
+        "recommendation": "Add links to LinkedIn, Twitter/X for social proof and entity recognition",
+        "score_impact": 4
+      }
+    ],
+    "summary": {
+      "title": "AI Phone Calls That Convert | telli's AI Sales Agent & Auto Dialer",
+      "title_length": 66,
+      "meta_description": "Enhance your sales with AI phone calls that convert. telli\u2019s AI Sales Agent automates outreach, boosts engagement by 3X, and reduces costs by 70%. Fully CRM-int",
+      "meta_length": 192,
+      "word_count": 675,
+      "h1_count": 1,
+      "images_total": 80,
+      "images_with_alt": 80,
+      "images_with_descriptive_alt": 17,
+      "https": true,
+      "schema_types": [],
+      "schema_count": 0,
+      "schema_completeness": 0.0,
+      "has_organization": false,
+      "has_faq": false,
+      "same_as_count": 0,
+      "same_as_urls": [],
+      "robots_txt_found": true,
+      "sitemap_found": true,
+      "ai_crawlers_allowed": [
+        "GPTBot",
+        "Claude-Web",
+        "PerplexityBot",
+        "CCBot",
+        "GoogleOther"
+      ],
+      "ai_crawlers_blocked": [],
+      "has_about_page": false,
+      "has_contact_info": false,
+      "social_links": [],
+      "response_time_ms": 333,
+      "js_rendered": false
+    }
+  },
+  "mentions_check": {
+    "error": "Company analysis missing required data (products/services)"
+  },
+  "analysis_time_seconds": 16.30707311630249,
+  "success": true,
+  "errors": []
+}

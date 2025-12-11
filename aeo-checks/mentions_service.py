@@ -303,12 +303,58 @@ def generate_queries(
     services = []
     pain_points = []
     
+    # Extract geography data (use what frontend sends)
+    country_specific_queries = []
+    geographic_modifiers = []
+    regulatory_requirements = []
+    use_cases = []
+    
     if company_analysis and company_analysis.companyInfo:
         info = company_analysis.companyInfo
         industry = info.get("industry", "")
         product_category = info.get("productCategory", "")
         services = info.get("services", []) or []
         pain_points = info.get("pain_points", []) or []
+        
+        # Extract geography data
+        country_specific_queries = info.get("country_specific_queries", []) or []
+        geographic_modifiers = info.get("geographic_modifiers", []) or []
+        regulatory_requirements = info.get("regulatory_requirements", []) or []
+        use_cases = info.get("use_cases", []) or []
+    
+    # AI-platform + geography queries (highest priority for AEO)
+    ai_platforms = ["ChatGPT", "Perplexity", "Claude", "Gemini"]
+    if pain_points and geographic_modifiers:
+        for pain_point in pain_points[:2]:
+            for platform in ai_platforms[:2]:  # Top 2 platforms
+                for geo_mod in geographic_modifiers[:1]:  # Top geo modifier
+                    queries.append({"query": f"how to {pain_point} with {platform} for {geo_mod} companies", "dimension": "AI-Platform-Geography"})
+    
+    # Service + geography combinations for AEO-specific targeting
+    if services and geographic_modifiers:
+        for service in services[:1]:
+            for geo_mod in geographic_modifiers[:1]:
+                queries.append({"query": f"{service} for {geo_mod} enterprises", "dimension": "Service-Geography"})
+    
+    # Industry + geography combinations for hyperniche targeting
+    if industry and geographic_modifiers:
+        for geo_mod in geographic_modifiers[:1]:
+            queries.append({"query": f"best {industry} for {geo_mod} companies", "dimension": "Industry-Geography"})
+            if pain_points:
+                # Industry + geography + pain point (ultra-specific)
+                pain_point = pain_points[0]
+                queries.append({"query": f"how to {pain_point} in {industry} for {geo_mod} enterprises", "dimension": "Industry-Geography-Intent"})
+    
+    # Use pre-generated use cases (already hyperniche)
+    if use_cases:
+        for use_case in use_cases[:2]:
+            queries.append({"query": f"best practices for {use_case}", "dimension": "Use-Case/Intent"})
+    
+    # Compliance + AI platform queries  
+    if regulatory_requirements and services:
+        for req in regulatory_requirements[:1]:
+            for service in services[:1]:
+                queries.append({"query": f"{service} with {req} compliance", "dimension": "Compliance-Focused"})
     
     # Service-specific queries
     if services:
@@ -331,10 +377,12 @@ def generate_queries(
     queries.append({"query": f"{company_name} vs alternatives", "dimension": "Competitive"})
     queries.append({"query": f"{company_name} competitors", "dimension": "Competitive"})
     
-    # Broad category
+    # Broad category (lowest priority - generic queries)
     if product_category:
         queries.append({"query": f"best {product_category}", "dimension": "Broad Category"})
-    queries.append({"query": "best software tools 2024", "dimension": "Broad Category"})
+    # Generic fallback query (moved to last priority)
+    current_year = datetime.now().year
+    queries.append({"query": f"best software tools {current_year}", "dimension": "Broad Category"})
     
     # Limit based on mode
     if mode == "fast":

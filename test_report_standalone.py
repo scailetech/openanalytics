@@ -106,7 +106,7 @@ def get_sample_data(company_name: str = "Telli"):
                     'competitorsMentioned': ['Amplitude', 'Mixpanel'],
                 },
                 {
-                    'query': 'best Product Analytics 2025',
+                    'query': f'best Product Analytics {datetime.now().year}',
                     'platformsChecked': ['gemini', 'chatgpt', 'perplexity'],
                     'reason': "Competitors (Amplitude, Heap) are being recommended instead of you",
                     'responseExcerpt': 'Best product analytics tools highlighted: Amplitude, Heap.',
@@ -125,7 +125,7 @@ def get_sample_data(company_name: str = "Telli"):
                     'opportunityType': 'commercial',
                 },
                 {
-                    'query': 'best Product Analytics 2025',
+                    'query': f'best Product Analytics {datetime.now().year}',
                     'dimension': 'recommendations',
                     'platforms': ['gemini', 'chatgpt', 'perplexity'],
                     'competitorsMentioned': ['Amplitude', 'Heap', 'Mixpanel'],
@@ -149,7 +149,7 @@ def get_sample_data(company_name: str = "Telli"):
                     'opportunityType': 'informational',
                 },
                 {
-                    'query': 'top Product Analytics tools 2025',
+                    'query': f'top Product Analytics tools {datetime.now().year}',
                     'dimension': 'recommendations',
                     'platforms': ['gemini', 'chatgpt', 'perplexity'],
                     'competitorsMentioned': ['Amplitude', 'Mixpanel', 'Heap'],
@@ -176,12 +176,12 @@ def get_sample_data(company_name: str = "Telli"):
             {'type': 'Branded', 'query': 'what is Mitzu'},
             {'type': 'Competitive', 'query': 'Mitzu vs Amplitude'},
             {'type': 'ICP Targeting', 'query': 'best Product Analytics for Product teams in Global'},
-            {'type': 'Recommendations', 'query': 'best Product Analytics 2025'},
+            {'type': 'Recommendations', 'query': f'best Product Analytics {datetime.now().year}'},
             {'type': 'Problem Solution', 'query': 'best software for complex data pipelines'},
             {'type': 'Branded', 'query': 'Mitzu Product Analytics review'},
             {'type': 'Competitive', 'query': 'Mitzu vs Mixpanel'},
             {'type': 'ICP Targeting', 'query': 'best Product Analytics for Data analysts'},
-            {'type': 'Recommendations', 'query': 'top Product Analytics tools 2025'},
+            {'type': 'Recommendations', 'query': f'top Product Analytics tools {datetime.now().year}'},
             {'type': 'Problem Solution', 'query': 'how to solve slow analytics queries'},
         ],
         'mentionQuality': {

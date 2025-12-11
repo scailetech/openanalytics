@@ -344,12 +344,12 @@ Extract and return JSON with ONLY information found on {domain}:
     "key_features": ["features mentioned"],
     "services": ["services offered"],
     "products": ["products offered"],
-    "pain_points": ["customer pain points they address"],
-    "use_cases": ["use cases mentioned"],
-    "customer_problems": ["problems they solve"],
-    "solution_keywords": ["solution-related keywords"],
-    "value_propositions": ["their value props"],
-    "differentiators": ["what makes them unique"]
+    "pain_points": ["customer pain points they address - infer from content like 'struggling with', 'challenges with', 'problems with', or solutions they provide"],
+    "use_cases": ["use cases mentioned - extract from customer scenarios, examples, or how their product is used"],
+    "customer_problems": ["problems they solve - infer from their solutions, benefits, or value propositions"],
+    "solution_keywords": ["solution-related keywords - terms describing what they deliver"],
+    "value_propositions": ["their value props - benefits, outcomes, or advantages they provide"],
+    "differentiators": ["what makes them unique - competitive advantages or unique selling points"]
   }},
   "legal_info": {{
     "legal_entity": "exact legal name from imprint",
@@ -571,9 +571,17 @@ After reading the website, provide a comprehensive analysis covering:
 5. Services (professional services if any)  
 6. Key features (technical capabilities)
 7. Value propositions (what makes them valuable?)
-8. Competitors (find 3-5 if possible)
+8. Pain points they address (what customer problems do they solve? Look for phrases like "struggling with", "challenges", "problems", or infer from their solutions)
+9. Use cases (how is their product/service used? Look for customer scenarios, examples, case studies)
+10. Customer problems (what specific issues do they help with? Infer from benefits, solutions, or outcomes they deliver)
+11. Competitors (find 3-5 if possible)
 
-Focus on extracting factual information from the website. Be thorough."""
+IMPORTANT: For pain points and use cases, don't just look for explicit mentions - INFER from their value propositions, benefits, solutions, and marketing copy. For example:
+- If they say "boost visibility in AI search" → pain point: "improve search visibility"
+- If they mention "automated content creation" → use case: "content generation automation"
+- If they talk about "tracking mentions" → pain point: "monitor brand mentions"
+
+Focus on extracting factual information from the website. Be thorough and inferential."""
 
             logger.info(f"Calling ai_client.complete_with_tools with model={ai_model}, tools={tools}")
             result = await get_ai_client().complete_with_tools(
