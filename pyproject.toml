@@ -50,7 +50,7 @@ dev = [
 ]
 
 [project.scripts]
-openanalytics = "cli:main"
+openanalytics = "cli:cli"
 
 [project.urls]
 Homepage = "https://github.com/federicodeponte/openanalytics"
