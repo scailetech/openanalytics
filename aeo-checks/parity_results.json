@@ -1,8 +1,0 @@
-{
-  "master_coverage": 100.0,
-  "leaderboard_coverage": 89.23076923076924,
-  "master_unique": 7,
-  "leaderboard_unique": 0,
-  "verdict": "\ud83d\ude80 SUPERIOR - Master has 100.0% feature coverage + 7 unique advanced features",
-  "total_features": 65
-}
