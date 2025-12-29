@@ -277,11 +277,9 @@ async def mentions_check(request: MentionsCheckRequest):
             request.num_queries
         )
 
-        # Test queries and check for company mentions
-        results = []
-        for q in queries:
-            result = await test_query_with_gemini(q["query"], request.company_name)
-            results.append(result)
+        # Test queries in parallel for better performance
+        tasks = [test_query_with_gemini(q["query"], request.company_name) for q in queries]
+        results = await asyncio.gather(*tasks)
 
         # Calculate metrics based on actual mentions
         total_responses = sum(1 for r in results if r.get("has_response"))
