@@ -10,6 +10,7 @@ lxml>=4.9.0
 
 # AI
 google-genai>=0.2.0
+python-dotenv>=1.0.0
 
 # Playwright for health check
 playwright>=1.40.0
