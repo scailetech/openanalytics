@@ -34,18 +34,20 @@ from checks.structured_data import run_structured_data_checks
 from checks.aeo_crawler import run_aeo_crawler_checks
 from checks.authority import run_authority_checks
 
-# Validate environment on startup
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    print("ERROR: GEMINI_API_KEY environment variable not set", file=sys.stderr)
-    sys.exit(1)
-
 # Initialize FastAPI
 app = FastAPI(
     title="OpenAnalytics",
     description="Health Check + Mentions Check with AI Hyperniche Queries",
     version="2.0.0",
 )
+
+@app.on_event("startup")
+async def validate_environment():
+    """Validate required environment variables on startup."""
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    if not gemini_api_key:
+        print("ERROR: GEMINI_API_KEY environment variable not set", file=sys.stderr)
+        sys.exit(1)
 
 app.add_middleware(
     CORSMiddleware,
@@ -326,7 +328,7 @@ async def root():
             "/": "GET - This info"
         },
         "requirements": {
-            "GEMINI_API_KEY": "✓ Set" if GEMINI_API_KEY else "✗ Missing"
+            "GEMINI_API_KEY": "✓ Set" if os.getenv("GEMINI_API_KEY") else "✗ Missing"
         }
     }
 
@@ -335,7 +337,7 @@ async def status():
     """Health status."""
     return {
         "status": "healthy",
-        "gemini_configured": bool(GEMINI_API_KEY)
+        "gemini_configured": bool(os.getenv("GEMINI_API_KEY"))
     }
 
 if __name__ == "__main__":
