@@ -1,5 +1,8 @@
 """
-Gemini Client using the new google-genai SDK.
+Gemini Client using the new google-genai SDK with Search Grounding.
+
+v2.0: Added native Google Search grounding for real-time AI visibility testing.
+This allows the Mentions Check to test actual live search results, not just training data.
 """
 import os
 import json
@@ -7,6 +10,7 @@ import logging
 import httpx
 from typing import List, Dict, Any, Optional
 from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
@@ -288,38 +292,99 @@ class GeminiClient:
 
         return prompt[:100]  # Fallback
 
-    async def query_mentions_with_search_grounding(self, query: str, company_name: str) -> Dict[str, Any]:
-        """Query for company mentions with search grounding - main method for AEO mentions check."""
+    async def query_with_search_grounding(self, query: str) -> Dict[str, Any]:
+        """Query Gemini with real-time Google Search grounding.
+
+        This is the key method for accurate AEO visibility testing.
+        Instead of relying on training data, it uses live Google Search
+        to ground the response in real-time web results.
+
+        Returns:
+            Dict with response text, grounding sources, and metadata
+        """
         try:
-            # Create search prompt for mentions
-            prompt = f"""I need information about "{query}".
+            # Configure Google Search grounding tool
+            grounding_tool = types.Tool(
+                google_search=types.GoogleSearch()
+            )
 
-Please search the web and provide information about the best companies, tools, or platforms related to this query. Focus on:
-1. Which companies or platforms are mentioned as top options
-2. What specific features and services they offer
-3. Any rankings, reviews, or recommendations
-4. Market leaders and popular choices
+            config = types.GenerateContentConfig(
+                tools=[grounding_tool]
+            )
 
-Please include specific company names and details about their capabilities."""
+            # Generate content with search grounding
+            response = self.client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=query,
+                config=config,
+            )
 
-            # Use search-enabled model
-            response = await self._complete_with_search(prompt)
+            # Extract grounding metadata (sources, citations)
+            grounding_sources = []
+            grounding_chunks = []
+
+            if response.candidates and len(response.candidates) > 0:
+                candidate = response.candidates[0]
+                if hasattr(candidate, 'grounding_metadata') and candidate.grounding_metadata:
+                    metadata = candidate.grounding_metadata
+
+                    # Extract grounding chunks (actual sources)
+                    if hasattr(metadata, 'grounding_chunks') and metadata.grounding_chunks:
+                        for chunk in metadata.grounding_chunks:
+                            if hasattr(chunk, 'web') and chunk.web:
+                                grounding_sources.append({
+                                    'uri': chunk.web.uri if hasattr(chunk.web, 'uri') else '',
+                                    'title': chunk.web.title if hasattr(chunk.web, 'title') else ''
+                                })
+
+                    # Extract search queries used
+                    if hasattr(metadata, 'search_entry_point') and metadata.search_entry_point:
+                        grounding_chunks.append(str(metadata.search_entry_point))
 
             return {
                 "success": True,
                 "response": response.text,
                 "model": "gemini-2.5-flash",
-                "search_grounding": True
+                "search_grounding": True,
+                "grounding_sources": grounding_sources,
+                "source_count": len(grounding_sources)
             }
 
         except Exception as e:
-            logger.error(f"Gemini mentions query error: {e}")
+            logger.error(f"Search grounding query error: {e}")
+            # Fallback to non-grounded query
+            return await self._fallback_query(query)
+
+    async def _fallback_query(self, query: str) -> Dict[str, Any]:
+        """Fallback to standard query without search grounding."""
+        try:
+            response = self.client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=query
+            )
+            return {
+                "success": True,
+                "response": response.text,
+                "model": "gemini-2.5-flash",
+                "search_grounding": False,
+                "grounding_sources": [],
+                "source_count": 0
+            }
+        except Exception as e:
+            logger.error(f"Fallback query error: {e}")
             return {
                 "success": False,
                 "error": str(e),
                 "response": "",
                 "search_grounding": False
             }
+
+    async def query_mentions_with_search_grounding(self, query: str, company_name: str) -> Dict[str, Any]:
+        """Query for company mentions with search grounding - main method for AEO mentions check.
+
+        DEPRECATED: Use query_with_search_grounding instead.
+        """
+        return await self.query_with_search_grounding(query)
 
 
 # Singleton instance

@@ -231,29 +231,61 @@ Return as JSON array:
         ][:num_queries]
 
 async def test_query_with_gemini(query: str, company_name: str) -> Dict[str, Any]:
-    """Test a single query with Gemini and detect company mentions."""
+    """Test a single query with Gemini using real-time Google Search grounding.
+
+    This uses live Google Search results to determine if the company
+    appears in actual AI-generated responses, not just training data.
+    """
     try:
         client = get_gemini_client()
-        response = await client.query_with_structured_output(
-            prompt=query,
-            system_prompt="Answer this query concisely.",
-            model="gemini-2.5-flash"
-        )
+
+        # Use search-grounded query for real-time results
+        response = await client.query_with_search_grounding(query)
 
         if response.get("success") and response.get("response"):
             text = response["response"]
-            # Check if company is mentioned in response
-            company_mentioned = company_name.lower() in text.lower()
+            grounding_sources = response.get("grounding_sources", [])
+
+            # Check if company is mentioned in response text
+            company_mentioned_in_text = company_name.lower() in text.lower()
+
+            # Also check if company appears in grounding sources (URLs/titles)
+            company_in_sources = False
+            for source in grounding_sources:
+                source_text = f"{source.get('uri', '')} {source.get('title', '')}".lower()
+                if company_name.lower() in source_text:
+                    company_in_sources = True
+                    break
+
+            # Company is "mentioned" if it appears in text OR in cited sources
+            company_mentioned = company_mentioned_in_text or company_in_sources
+
             return {
                 "query": query,
                 "has_response": True,
                 "company_mentioned": company_mentioned,
+                "mentioned_in_text": company_mentioned_in_text,
+                "mentioned_in_sources": company_in_sources,
                 "response_length": len(text),
-                "response_preview": text[:200] if text else ""
+                "response_preview": text[:200] if text else "",
+                "search_grounded": response.get("search_grounding", False),
+                "source_count": response.get("source_count", 0),
+                "sources": grounding_sources[:3]  # Include top 3 sources for transparency
             }
-        return {"query": query, "has_response": False, "company_mentioned": False}
+        return {
+            "query": query,
+            "has_response": False,
+            "company_mentioned": False,
+            "search_grounded": False
+        }
     except Exception as e:
-        return {"query": query, "has_response": False, "company_mentioned": False, "error": str(e)}
+        return {
+            "query": query,
+            "has_response": False,
+            "company_mentioned": False,
+            "error": str(e),
+            "search_grounded": False
+        }
 
 @app.post("/mentions", response_model=MentionsCheckResponse)
 async def mentions_check(request: MentionsCheckRequest):
